@@ -1,5 +1,7 @@
 package com.horizontech.biz.digitalquran;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
@@ -14,6 +16,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -35,11 +39,21 @@ public class ParaText extends AppCompatActivity {
     Button translation;
     ListView ParaTextList;
     boolean isTranslate=false;
-    TranslationAdapter listAdapter;
+    TranslationAdapter listAdapter_Eng;
+    TranslationAdapter listAdapter_Urdu;
     ScrollView ParaTextScroll;
     LayoutInflater inflater;
     DbBackend db;
     String[] text;
+    final Context context = this;
+    Dialog dialog;
+    String[] translation_text_Eng;
+    String[] translation_text_Urdu;
+    String[] arabic_text;
+    RadioGroup language_radiogroup;
+    Button dialogButton;
+    RadioButton radioButton_en;
+    RadioButton radioButton_ur;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,9 +120,11 @@ public class ParaText extends AppCompatActivity {
         String finalize1 = finalize.replaceAll("\\[","");
         String finalize2 = finalize1.replaceAll("\\]","");
 
-        String[] arabic_text = db.Para_Ayat_Text(index);
-        String[] translation_text = db.Para_Translation_Text(index);
-        listAdapter = new TranslationAdapter(this,translation_text,arabic_text);
+        arabic_text = db.Para_Ayat_Text(index);
+        translation_text_Eng = db.Para_Translation_Eng(index);
+        translation_text_Urdu = db.Para_Translation_Urdu(index);
+        listAdapter_Eng = new TranslationAdapter(this,translation_text_Eng,arabic_text);
+        listAdapter_Urdu = new TranslationAdapter(this,translation_text_Urdu,arabic_text);
         quranText.setText(finalize2);
         translation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,10 +132,30 @@ public class ParaText extends AppCompatActivity {
                 if(!isTranslate){
                     translation.setText("HIDE TRANSLATION");
                     isTranslate=true;
-                    quranText.setVisibility(View.INVISIBLE);
-                    ParaTextScroll.setVisibility(View.INVISIBLE);
-                    ParaTextList.setVisibility(View.VISIBLE);
-                    ParaTextList.setAdapter(listAdapter);
+                    dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.activity_custom_translation);
+                    dialog.setTitle("Select Language");
+                    language_radiogroup= (RadioGroup) dialog.findViewById(R.id.language_radio);
+                    radioButton_en= (RadioButton) dialog.findViewById(R.id.en_radio);
+                    radioButton_ur= (RadioButton) dialog.findViewById(R.id.ur_radio);
+                    dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                    language_radiogroup.check(R.id.ur_radio);
+                    // if button is clicked, close the custom dialog
+                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                            quranText.setVisibility(View.INVISIBLE);
+                            ParaTextScroll.setVisibility(View.INVISIBLE);
+                            ParaTextList.setVisibility(View.VISIBLE);
+                            if (radioButton_en.isChecked()){
+                                ParaTextList.setAdapter(listAdapter_Eng);
+                            }else {
+                                ParaTextList.setAdapter(listAdapter_Urdu);
+                            }
+                        }
+                    });
+                    dialog.show();
 
                 }else{
                     translation.setText("SHOW TRANSLATION");

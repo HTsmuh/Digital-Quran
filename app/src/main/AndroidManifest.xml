@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.horizontech.biz.digitalquran.SplashActivity"
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,25 +17,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.horizontech.biz.digitalquran.Fragments.MainActivity" />
+        <activity android:name=".Fragments.MainActivity" />
         <activity
-            android:name="com.horizontech.biz.digitalquran.SurahText"
+            android:name=".SurahText"
             android:theme="@style/DayMoodFullScreen" />
         <activity
-            android:name="com.horizontech.biz.digitalquran.ParaText"
+            android:name=".ParaText"
             android:theme="@style/NightMoodFullScreen" />
         <activity
-            android:name="com.horizontech.biz.digitalquran.Menu.SettingActivity"
+            android:name=".Menu.SettingActivity"
             android:label="Settings"
             android:theme="@style/MyAppTheme" />
         <activity
-            android:name="com.horizontech.biz.digitalquran.Menu.CreditsActivity"
+            android:name=".Menu.CreditsActivity"
             android:label="Credits"
             android:theme="@style/MyAppTheme" />
         <activity
-            android:name="com.horizontech.biz.digitalquran.Menu.AboutUsActivity"
+            android:name=".Menu.AboutUsActivity"
             android:label="About Us"
             android:theme="@style/MyAppTheme" />
+        <activity android:name=".CustomTranslation"></activity>
     </application>
 
 </manifest>

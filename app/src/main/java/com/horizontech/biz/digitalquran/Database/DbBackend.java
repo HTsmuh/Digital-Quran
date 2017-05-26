@@ -206,8 +206,23 @@ public class DbBackend extends DbObject {
         return ayat_array;
     }
     //On Click translation Button translation of Surah Ayat
-    public String[] Surah_Translation_Text(int index) {
-        String query = "Select * from Translation_Ahmedali where sura="+index;
+    public String[] Surah_Translation_Urdu(int index) {
+        String query = "Select * from ur_kanzuliman where sura="+index;
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        ArrayList<String> translation_text_array = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                String translation_text = cursor.getString(cursor.getColumnIndexOrThrow("text"));
+                translation_text_array.add(translation_text);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        String[] translation_array = new String[translation_text_array.size()];
+        translation_array = translation_text_array.toArray(translation_array);
+        return translation_array;
+    }
+    public String[] Surah_Translation_Eng(int index) {
+        String query = "Select * from en_ahmedraza where sura="+index;
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         ArrayList<String> translation_text_array = new ArrayList<>();
         if (cursor.moveToFirst()) {
@@ -285,8 +300,23 @@ public class DbBackend extends DbObject {
         return ayat_array;
     }
     //On Click translation Button translation of Para Ayat
-    public String[] Para_Translation_Text(int index) {
-        String query = "Select * from Translation_Ahmedali where para="+index;
+    public String[] Para_Translation_Urdu(int index) {
+        String query = "Select * from ur_kanzuliman where para="+index;
+        Cursor cursor = this.getDbConnection().rawQuery(query, null);
+        ArrayList<String> translation_text_array = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                String translation_text = cursor.getString(cursor.getColumnIndexOrThrow("text"));
+                translation_text_array.add(translation_text);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        String[] translation_array = new String[translation_text_array.size()];
+        translation_array = translation_text_array.toArray(translation_array);
+        return translation_array;
+    }
+    public String[] Para_Translation_Eng(int index) {
+        String query = "Select * from en_ahmedraza where para="+index;
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         ArrayList<String> translation_text_array = new ArrayList<>();
         if (cursor.moveToFirst()) {
