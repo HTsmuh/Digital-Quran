@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:id="@+id/bismillahimage"
             android:layout_marginTop="5dp"
-            android:src="@drawable/bismillah_nightmod"/>
+            android:src="@drawable/bismillah_daymod"/>
             <TextView
                 android:id="@+id/surah_text"
                 android:layout_width="match_parent"
@@ -53,10 +53,10 @@
         <Button
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:id="@+id/listen"
+            android:id="@+id/bookmark"
             android:layout_height="25dp"
             android:background="#364710"
-            android:text="LISTEN PARA"
+            android:text="BOOKMARK"
             android:textColor="@color/colorBackground"
             android:layout_marginRight="2dp"/>
         <Button

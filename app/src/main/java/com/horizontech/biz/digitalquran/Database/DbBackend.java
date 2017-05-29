@@ -222,7 +222,7 @@ public class DbBackend extends DbObject {
         return translation_array;
     }
     public String[] Surah_Translation_Eng(int index) {
-        String query = "Select * from en_ahmedraza where sura="+index;
+        String query = "Select * from en_kanzuliman where sura="+index;
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         ArrayList<String> translation_text_array = new ArrayList<>();
         if (cursor.moveToFirst()) {
@@ -316,7 +316,7 @@ public class DbBackend extends DbObject {
         return translation_array;
     }
     public String[] Para_Translation_Eng(int index) {
-        String query = "Select * from en_ahmedraza where para="+index;
+        String query = "Select * from en_kanzuliman where para="+index;
         Cursor cursor = this.getDbConnection().rawQuery(query, null);
         ArrayList<String> translation_text_array = new ArrayList<>();
         if (cursor.moveToFirst()) {
