@@ -18,7 +18,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.horizontech.biz.digitalquran.Adapter.PagerAdapter;
 import com.horizontech.biz.digitalquran.Menu.AboutUsActivity;
@@ -36,11 +35,12 @@ public class MainActivity extends AppCompatActivity {
     boolean haveConnectedWifi = false;
     boolean haveConnectedMobile = false;
     String latestVersion;
+    String network;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String network= String.valueOf(haveNetworkConnection());
+        network= String.valueOf(haveNetworkConnection());
         if (network.equals("true")){
             //getCurrentVersion();
             String currentVersion = getCurrentVersion();
@@ -48,9 +48,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 latestVersion = new GetLatestVersion().execute().get();
                 Log.d("LOG", "Latest version = " + latestVersion);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Click button action
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.horizontech.biz.digitalquran")));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName())));
                         dialog.dismiss();
                     }
                 });
@@ -134,9 +132,8 @@ public class MainActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e1) {
             e1.printStackTrace();
         }
-        String currentVersion = pInfo.versionName;
 
-        return currentVersion;
+        return pInfo.versionName;
     }
     private class GetLatestVersion extends AsyncTask<String, String, String> {
         @Override
@@ -148,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             try {
                 //It retrieves the latest version by scraping the content of current version from play store at runtime
-                String urlOfAppFromPlayStore = "https://play.google.com/store/apps/details?id=com.horizontech.biz.digitalquran";
+                String urlOfAppFromPlayStore = "https://play.google.com/store/apps/details?id=" + getPackageName();
                 Document doc = Jsoup.connect(urlOfAppFromPlayStore).get();
                 latestVersion = doc.getElementsByAttributeValue("itemprop","softwareVersion").first().text();
 
@@ -165,7 +162,48 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_setting, menu);
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        if (network.equals("true")) {
+            new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.logo)
+                    .setTitle("Please Rate us")
+                    .setMessage("We need your help to rate this app!")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse("market://details?id=" + getPackageName()));
+                            startActivity(i);
+                        }
+
+                    })
+                    .setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+
+                    })
+                    .show();
+        }else{
+                new AlertDialog.Builder(this)
+                        .setIcon(R.drawable.alert)
+                        .setTitle("Closing Application")
+                        .setMessage("Are you sure you want to close this Application?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -179,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, AboutUsActivity.class);
             startActivity(intent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
