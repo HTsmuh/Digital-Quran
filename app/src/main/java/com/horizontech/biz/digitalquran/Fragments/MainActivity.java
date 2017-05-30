@@ -24,6 +24,7 @@ import com.horizontech.biz.digitalquran.Menu.AboutUsActivity;
 import com.horizontech.biz.digitalquran.Menu.CreditsActivity;
 import com.horizontech.biz.digitalquran.R;
 import com.horizontech.biz.digitalquran.Menu.SettingActivity;
+import com.winsontan520.wversionmanager.library.WVersionManager;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_about_us, menu);
         getMenuInflater().inflate(R.menu.menu_credits, menu);
         getMenuInflater().inflate(R.menu.menu_setting, menu);
+        getMenuInflater().inflate(R.menu.menu_rate, menu);
         return true;
     }
     @Override
@@ -216,6 +218,13 @@ public class MainActivity extends AppCompatActivity {
         }else  if (id == R.id.action_about) {
             Intent intent = new Intent(this, AboutUsActivity.class);
             startActivity(intent);
+        }else  if (id == R.id.action_rate) {
+            WVersionManager versionManager = new WVersionManager(this);
+            versionManager.setTitle("Please rate us"); // optional
+            versionManager.setMessage("We need your help to rate this app!"); // optional
+            versionManager.setAskForRatePositiveLabel("OK"); // optional
+            versionManager.setAskForRateNegativeLabel("Not now"); // optional
+            versionManager.askForRate();
         }
         return super.onOptionsItemSelected(item);
     }
